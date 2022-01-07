@@ -64,6 +64,12 @@ namespace vibration_daq {
                 return true;
             case RecordingMode::AFFT:
             case RecordingMode::RTS:
+                //TODO
+                if (!readRTSConfig(node["RTS_config"], vibrationSensor.rtsConfig)) {
+                    LOG_S(WARNING) << "could not read MTC_config from config";
+                    return false;
+                }
+                return true;
             default:
                 LOG_S(WARNING) << "only MFFT and MTC supported.";
                 return false;
@@ -145,6 +151,15 @@ namespace vibration_daq {
         }
 
         return readRecordingConfig(node, mtcConfig);
+    }
+
+    bool ConfigModule::readRTSConfig(const YAML::Node &node, MTCConfig &rtsConfig) {
+        if (!node.IsMap()) {
+            LOG_S(WARNING) << "RTS node is not a map";
+            return false;
+        }
+
+        return readRecordingConfig(node, rtsConfig);
     }
 
     bool ConfigModule::setup(std::string configFile) {

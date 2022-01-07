@@ -214,6 +214,9 @@ bool setupVibrationSensorModules(const bool &externalTriggerActivated) {
             case RecordingMode::MTC:
                 vibrationSensorModule.activateMode(vibrationSensorConfig.mtcConfig);
                 break;
+            case RecordingMode::RTC:
+                vibrationSensorModule.activateMode(vibrationSensorConfig.rtcConfig);
+                break;
         }
 
         vibrationSensorModules.push_back(vibrationSensorModule);

@@ -271,6 +271,10 @@ namespace vibration_daq {
         return activateMode(mtcConfig, RecordingMode::MTC);
     }
 
+    bool VibrationSensorModule::activateMode(const RTSConfig &rtsConfig) {
+        return activateMode(rtsConfig, RecordingMode::RTS);
+    }
+
     void VibrationSensorModule::writeFIRFilter(FIRFilter firFilter) {
         uint16_t filtCtrl = 0x0000;
         // set for every axis same filter

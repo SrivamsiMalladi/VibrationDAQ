@@ -124,6 +124,57 @@ namespace vibration_daq {
             return false;
         }
 
+        LOG_F(ERROR, "Trying RTS mode");
+        uint16_t res = read(spi_commands::REC_CTRL);
+        LOG_F(ERROR, "REC_CTRL: 0x%04X", res);
+        write(spi_commands::REC_CTRL, 0x1103);
+        LOG_F(ERROR, "Done setting RTS mode");
+        res = read(spi_commands::REC_CTRL);
+        LOG_F(ERROR, "REC_CTRL: 0x%04X", res);
+
+        res = read(spi_commands::MISC_CTRL);
+        LOG_F(ERROR, "REC_CTRL: 0x%04X", res);
+        write(spi_commands::MISC_CTRL,0x0100);
+        LOG_F(ERROR, "Done setting external trigger for RTS mode");
+        res = read(spi_commands::MISC_CTRL);
+        LOG_F(ERROR, "REC_CTRL: 0x%04X", res);
+
+        int externalTriggerPin = 17;
+        gpio_t *gpioTrigger;
+        gpioTrigger = gpio_new();
+        if (gpio_open(gpioTrigger, "/dev/gpiochip0", externalTriggerPin, GPIO_DIR_OUT_LOW) < 0) {
+            LOG_F(ERROR, "gpio_open(): %s", gpio_errmsg(gpioTrigger));
+            return EXIT_FAILURE;
+        }
+
+        LOG_F(ERROR, "Turning trigger on");
+        if (gpio_write(gpioTrigger, true) < 0) {
+            fprintf(stderr, "gpio_write(gpioTrigger, true): %s", gpio_errmsg(gpioTrigger));
+        }
+
+        bool notBusy=false;
+        while(!notBusy) {
+            if (gpio_read(gpioBusy, &notBusy) < 0) {
+                LOG_F(ERROR, "gpio_read(): %s\n", gpio_errmsg(gpioBusy));
+                exit(1);
+            }
+        }
+        uint8_t txbuf200[200];
+        uint8_t rxbuf200[200];
+        for(int i=0;i<200;i++) {
+            txbuf200[i]=0;
+            rxbuf200[i]=0;
+        }
+        spi_transfer(spi, txbuf200, rxbuf200, 200);
+        LOG_F(ERROR, "Frame 1 header: 0x%02X %02X", txbuf200[0], txbuf200[1]);
+
+        for(int i=0;i<200;i++) {
+            txbuf200[i]=0;
+            rxbuf200[i]=0;
+        }
+        spi_transfer(spi, txbuf200, rxbuf200, 200);
+        LOG_F(ERROR, "Frame 2 header: 0x%02X %02X", txbuf200[0], txbuf200[1]);
+
         return true;
     }
 

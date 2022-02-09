@@ -16,7 +16,7 @@
 #include <vibration_daq/StorageModule.hpp>
 #include "chrono"
 #include "thread"
-#include "yaml-cpp/yaml.h"
+//#include "yaml-cpp/yaml.h"
 #include "date/date.h"
 
 using namespace vibration_daq;
@@ -49,17 +49,17 @@ int main(int argc, char *argv[]) {
     }
 
     LOG_S(INFO) << "Loading from config file path: " << configFilePath;
-    if (!configModule.setup(configFilePath)) {
-        LOG_S(ERROR) << "Could not setup ConfigModule.";
-        return EXIT_FAILURE;
-    }
+    // if (!configModule.setup(configFilePath)) {
+    //     LOG_S(ERROR) << "Could not setup ConfigModule.";
+    //     return EXIT_FAILURE;
+    // }
 
     bool externalTriggerActivated = false;
     int externalTriggerPin = -1;
-    if (!configModule.readExternalTriggerConfig(externalTriggerActivated, externalTriggerPin)) {
-        LOG_S(ERROR) << "Could not retrieve externalTrigger config.";
-        return EXIT_FAILURE;
-    }
+    // if (!configModule.readExternalTriggerConfig(externalTriggerActivated, externalTriggerPin)) {
+    //     LOG_S(ERROR) << "Could not retrieve externalTrigger config.";
+    //     return EXIT_FAILURE;
+    // }
     if (externalTriggerActivated) {
         gpioTrigger = gpio_new();
         if (gpio_open(gpioTrigger, "/dev/gpiochip0", externalTriggerPin, GPIO_DIR_OUT_LOW) < 0) {
@@ -70,10 +70,10 @@ int main(int argc, char *argv[]) {
 
     bool statusLedActivated = false;
     int statusLedPin = -1;
-    if (!configModule.readStatusLedConfig(statusLedActivated, statusLedPin)) {
-        LOG_S(ERROR) << "Could not retrieve externalTrigger config.";
-        return EXIT_FAILURE;
-    }
+    // if (!configModule.readStatusLedConfig(statusLedActivated, statusLedPin)) {
+    //     LOG_S(ERROR) << "Could not retrieve externalTrigger config.";
+    //     return EXIT_FAILURE;
+    // }
     if (statusLedActivated) {
         gpioStatusLed = gpio_new();
         if (gpio_open(gpioStatusLed, "/dev/gpiochip0", statusLedPin, GPIO_DIR_OUT_LOW) < 0) {
@@ -186,10 +186,69 @@ system_clock::time_point triggerVibrationSensors(const bool &externalTrigger) {
 
 bool setupVibrationSensorModules(const bool &externalTriggerActivated) {
     std::vector<VibrationSensorConfig> vibrationSensorConfigs;
-    if (!configModule.readVibrationSensors(vibrationSensorConfigs)) {
-        LOG_S(ERROR) << "Could not retrieve vibration sensors from config.";
+    VibrationSensorConfig vibrationSensor;
+        
+    vibrationSensor.name = "sensor1";
+    vibrationSensor.busyPin = 22;
+    vibrationSensor.resetPin = 27;
+    vibrationSensor.spiPath = "/dev/spidev0.0";
+
+    std::string recordingModeString = "MFFT";
+    if (!Enum::convert(recordingModeString, vibrationSensor.recordingMode)) {
+        LOG_S(WARNING) << "could not convert decimation_factor to enum: " << recordingModeString;
         return false;
     }
+
+    switch (vibrationSensor.recordingMode) {
+        case RecordingMode::MFFT:
+            std::string decimationFactorString = "Factor_2";
+            if (!Enum::convert(decimationFactorString, mfftConfig.decimationFactor)) {
+                LOG_S(WARNING) << "could not convert decimation_factor to enum: " << decimationFactorString;
+                return false;
+            }
+
+            std::string firFilterString="NO_FILTER";
+            if (!Enum::convert(firFilterString, mfftConfig.firFilter)) {
+                LOG_S(WARNING) << "could not convert fir_filter to enum: " << firFilterString;
+                return false;
+            }
+
+            if (recordingConfig.firFilter == FIRFilter::CUSTOM) {
+                LOG_S(WARNING) << "could not read custom_filter_taps from config";
+                return false;
+            }
+
+            mfftConfig.spectralAvgCount = 2;
+            if (mfftConfig.spectralAvgCount < 1 || mfftConfig.spectralAvgCount > 255) {
+                LOG_S(WARNING) << "spectral_avg_count is not in range (1-255): " << mfftConfig.spectralAvgCount;
+                return false;
+            }
+
+            std::string windowSettingString = "HANNING";
+            if (!Enum::convert(windowSettingString, mfftConfig.windowSetting)) {
+                LOG_S(WARNING) << "could not convert window_setting to enum: " << windowSettingString;
+                return false;
+            }
+            
+            return true;
+        case RecordingMode::MTC:
+            LOG_S(WARNING) << "could not read MTC_config from config";
+            return false;
+            //return true;
+        case RecordingMode::AFFT:
+        case RecordingMode::RTS:
+            //TODO
+            if (!readRTSConfig(node["RTS_config"], vibrationSensor.rtsConfig)) {
+                LOG_S(WARNING) << "could not read MTC_config from config";
+                return false;
+            }
+            return true;
+        default:
+            LOG_S(WARNING) << "only MFFT supported.";
+            return false;
+    }
+    vibrationSensorConfigs.push_back(vibrationSensor);
+
 
     for (const auto &vibrationSensorConfig : vibrationSensorConfigs) {
         VibrationSensorModule vibrationSensorModule(vibrationSensorConfig.name);

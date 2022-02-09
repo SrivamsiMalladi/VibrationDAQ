@@ -1,0 +1,1 @@
+/usr/bin/c++  -DLOGURU_WITH_STREAMS=1 CMakeFiles/vibration_daq_app.dir/main.cpp.o -o vibration_daq_app  ../src/libvibration_library.a -lstdc++fs -pthread -ldl ../src/c-periphery-2.1.0/src/periphery_lib/periphery.a 

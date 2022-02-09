@@ -1,0 +1,9 @@
+# Hashes of file build rules.
+9d9a15fc52a0946847d7b7403c11846c src/CMakeFiles/periphery_lib
+9f46dcd98ed4c09d428159cfc5989ce8 src/CMakeFiles/periphery_lib-complete
+6ce5a640d364ec32fbc1f46d914e58f2 src/c-periphery-2.1.0/src/periphery_lib-stamp/periphery_lib-build
+71eebf828b7ae86da2ac92536301bc2a src/c-periphery-2.1.0/src/periphery_lib-stamp/periphery_lib-configure
+bb9fe583929878265a32cf2d1d3a4bcf src/c-periphery-2.1.0/src/periphery_lib-stamp/periphery_lib-download
+719988eae0ca46db6dff6969bdb42f0f src/c-periphery-2.1.0/src/periphery_lib-stamp/periphery_lib-install
+0bdcb90212546b6f1b069bcf9a63c822 src/c-periphery-2.1.0/src/periphery_lib-stamp/periphery_lib-mkdir
+ddc81b34c4feca20e5af5d68681a555f src/c-periphery-2.1.0/src/periphery_lib-stamp/periphery_lib-patch

@@ -1,0 +1,12 @@
+# Target labels
+ periphery_lib
+# Source files and their labels
+/home/pi/Documents/SrivamsiMalladi/VibrationDAQ_AE/VibrationDAQ/build/src/CMakeFiles/periphery_lib
+/home/pi/Documents/SrivamsiMalladi/VibrationDAQ_AE/VibrationDAQ/build/src/CMakeFiles/periphery_lib.rule
+/home/pi/Documents/SrivamsiMalladi/VibrationDAQ_AE/VibrationDAQ/build/src/CMakeFiles/periphery_lib-complete.rule
+/home/pi/Documents/SrivamsiMalladi/VibrationDAQ_AE/VibrationDAQ/build/src/c-periphery-2.1.0/src/periphery_lib-stamp/periphery_lib-install.rule
+/home/pi/Documents/SrivamsiMalladi/VibrationDAQ_AE/VibrationDAQ/build/src/c-periphery-2.1.0/src/periphery_lib-stamp/periphery_lib-mkdir.rule
+/home/pi/Documents/SrivamsiMalladi/VibrationDAQ_AE/VibrationDAQ/build/src/c-periphery-2.1.0/src/periphery_lib-stamp/periphery_lib-download.rule
+/home/pi/Documents/SrivamsiMalladi/VibrationDAQ_AE/VibrationDAQ/build/src/c-periphery-2.1.0/src/periphery_lib-stamp/periphery_lib-patch.rule
+/home/pi/Documents/SrivamsiMalladi/VibrationDAQ_AE/VibrationDAQ/build/src/c-periphery-2.1.0/src/periphery_lib-stamp/periphery_lib-configure.rule
+/home/pi/Documents/SrivamsiMalladi/VibrationDAQ_AE/VibrationDAQ/build/src/c-periphery-2.1.0/src/periphery_lib-stamp/periphery_lib-build.rule

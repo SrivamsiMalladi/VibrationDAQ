@@ -166,14 +166,14 @@ namespace vibration_daq {
             rxbuf200[i]=0;
         }
         spi_transfer(spi, txbuf200, rxbuf200, 200);
-        LOG_F(ERROR, "Frame 1 header: 0x%02X %02X", txbuf200[0], txbuf200[1]);
+        LOG_F(ERROR, "Frame 1 header: 0x%02X %02X", rxbuf200[0], rxbuf200[1]);
 
         for(int i=0;i<200;i++) {
             txbuf200[i]=0;
             rxbuf200[i]=0;
         }
         spi_transfer(spi, txbuf200, rxbuf200, 200);
-        LOG_F(ERROR, "Frame 2 header: 0x%02X %02X", txbuf200[0], txbuf200[1]);
+        LOG_F(ERROR, "Frame 2 header: 0x%02X %02X", rxbuf200[0], rxbuf200[1]);
 
         return true;
     }

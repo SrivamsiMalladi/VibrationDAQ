@@ -5,7 +5,7 @@
 file(GLOB HEADER_LIST CONFIGURE_DEPENDS "${VibrationDAQ_SOURCE_DIR}/include/vibration_daq/*.hpp")
 
 # Make an automatic library - will be static or dynamic based on user setting
-add_library(vibration_library ConfigModule.cpp VibrationSensorModule.cpp StorageModule.cpp ../lib/loguru/loguru.cpp ../lib/date/date.h ../lib/date/tz.cpp ${HEADER_LIST})
+add_library(vibration_library VibrationSensorModule.cpp StorageModule.cpp ../lib/loguru/loguru.cpp ../lib/date/date.h ../lib/date/tz.cpp ${HEADER_LIST})
 
 # We need this directory, and users of our library will need it too
 target_include_directories(vibration_library PUBLIC ../include)
@@ -18,8 +18,8 @@ target_include_directories(vibration_library PUBLIC ../lib)
 target_link_libraries(vibration_library stdc++fs)
 
 # needed for yaml-cpp library
-include_directories(${YAML_INCLUDES})
-target_link_libraries(vibration_library ${YAML_LIBRARIES})
+#include_directories(${YAML_INCLUDES})
+#target_link_libraries(vibration_library ${YAML_LIBRARIES})
 
 # needed by loguru library
 target_link_libraries(vibration_library Threads::Threads)

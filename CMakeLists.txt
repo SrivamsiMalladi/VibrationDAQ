@@ -25,7 +25,7 @@ endif()
 #find_package(Boost REQUIRED)
 
 # adds yaml-cpp library
-find_package(Yaml REQUIRED)
+#find_package(Yaml REQUIRED)
 
 # needed by loguru library
 # https://stackoverflow.com/questions/1620918/cmake-and-libpthread

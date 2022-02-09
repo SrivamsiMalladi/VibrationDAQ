@@ -78,6 +78,8 @@ RecordingMode.hpp
 vector
 -
 
+../include/vibration_daq/entities/VibrationSensorConfig.hpp
+
 ../include/vibration_daq/entities/WindowSetting.hpp
 
 ../include/vibration_daq/utils/EnumConversion.hpp
@@ -202,6 +204,8 @@ iostream
 vibration_daq/VibrationSensorModule.hpp
 -
 vibration_daq/utils/HexUtils.hpp
+-
+vibration_daq/entities/VibrationSensorConfig.hpp
 -
 filesystem
 -

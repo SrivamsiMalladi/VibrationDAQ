@@ -22,6 +22,7 @@ namespace vibration_daq {
     };
 
     struct MFFTConfig : RecordingConfig {
+        std::string configName ="MFFT";
         int spectralAvgCount = 1; // 1-255
         WindowSetting windowSetting = WindowSetting::HANNING;
     };

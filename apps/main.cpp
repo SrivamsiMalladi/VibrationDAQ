@@ -6,8 +6,9 @@
 #include <iostream>
 #include <vibration_daq/VibrationSensorModule.hpp>
 #include <vibration_daq/utils/HexUtils.hpp>
+#include <vibration_daq/entities/VibrationSensorConfig.hpp>
 #include <filesystem>
-#include <vibration_daq/ConfigModule.hpp>
+//#include <vibration_daq/ConfigModule.hpp>
 #include "loguru/loguru.hpp"
 #include <fstream>
 #include <date/date.h>
@@ -28,7 +29,7 @@ gpio_t *gpioTrigger;
 gpio_t *gpioStatusLed;
 
 std::vector<VibrationSensorModule> vibrationSensorModules;
-ConfigModule configModule;
+//ConfigModule configModule;
 StorageModule storageModule;
 
 bool setupVibrationSensorModules(const bool &externalTriggerActivated);
@@ -82,25 +83,26 @@ int main(int argc, char *argv[]) {
         }
     }
 
-
+    LOG_S(INFO) << "setupVibrationSensorModules()";
     if (!setupVibrationSensorModules(externalTriggerActivated)) {
         return EXIT_FAILURE;
     }
+    LOG_S(INFO) << "setupVibrationSensorModules() done";
 
-    std::string storageDirectoryPath;
-    if (!configModule.readStorageDirectoryPath(storageDirectoryPath)) {
-        LOG_S(ERROR) << "Could not retrieve storage_directory from config.";
-        return EXIT_FAILURE;
-    }
+    std::string storageDirectoryPath="/home/pi/Documents/";
+    //if (!configModule.readStorageDirectoryPath(storageDirectoryPath)) {
+    //    LOG_S(ERROR) << "Could not retrieve storage_directory from config.";
+    //    return EXIT_FAILURE;
+    //}
     if (!storageModule.setup({storageDirectoryPath})) {
         LOG_S(ERROR) << "Could not setup StorageModule.";
         return EXIT_FAILURE;
     }
 
-    int recordingsCount;
-    if (!configModule.readRecordingsCount(recordingsCount)) {
-        recordingsCount = 1;
-    }
+    int recordingsCount=2;
+    //if (!configModule.readRecordingsCount(recordingsCount)) {
+    //    recordingsCount = 1;
+    //}
 
     if (statusLedActivated && gpio_write(gpioStatusLed, true) < 0) {
         fprintf(stderr, "gpio_write(): %s", gpio_errmsg(gpioStatusLed));
@@ -198,54 +200,58 @@ bool setupVibrationSensorModules(const bool &externalTriggerActivated) {
         LOG_S(WARNING) << "could not convert decimation_factor to enum: " << recordingModeString;
         return false;
     }
+    
+    LOG_S(INFO) << "Mode set to " << Enum::toString(vibrationSensor.recordingMode);
 
     switch (vibrationSensor.recordingMode) {
-        case RecordingMode::MFFT:
-            std::string decimationFactorString = "Factor_2";
-            if (!Enum::convert(decimationFactorString, mfftConfig.decimationFactor)) {
+        case RecordingMode::MFFT: {
+            std::string decimationFactorString = "FACTOR_2";
+            if (!Enum::convert(decimationFactorString, vibrationSensor.mfftConfig.decimationFactor)) {
                 LOG_S(WARNING) << "could not convert decimation_factor to enum: " << decimationFactorString;
                 return false;
             }
 
             std::string firFilterString="NO_FILTER";
-            if (!Enum::convert(firFilterString, mfftConfig.firFilter)) {
+            if (!Enum::convert(firFilterString, vibrationSensor.mfftConfig.firFilter)) {
                 LOG_S(WARNING) << "could not convert fir_filter to enum: " << firFilterString;
                 return false;
             }
 
-            if (recordingConfig.firFilter == FIRFilter::CUSTOM) {
+            if (vibrationSensor.mfftConfig.firFilter == FIRFilter::CUSTOM) {
                 LOG_S(WARNING) << "could not read custom_filter_taps from config";
                 return false;
             }
 
-            mfftConfig.spectralAvgCount = 2;
-            if (mfftConfig.spectralAvgCount < 1 || mfftConfig.spectralAvgCount > 255) {
-                LOG_S(WARNING) << "spectral_avg_count is not in range (1-255): " << mfftConfig.spectralAvgCount;
+            vibrationSensor.mfftConfig.spectralAvgCount = 2;
+            if (vibrationSensor.mfftConfig.spectralAvgCount < 1 || vibrationSensor.mfftConfig.spectralAvgCount > 255) {
+                LOG_S(WARNING) << "spectral_avg_count is not in range (1-255): " << vibrationSensor.mfftConfig.spectralAvgCount;
                 return false;
             }
 
             std::string windowSettingString = "HANNING";
-            if (!Enum::convert(windowSettingString, mfftConfig.windowSetting)) {
+            if (!Enum::convert(windowSettingString, vibrationSensor.mfftConfig.windowSetting)) {
                 LOG_S(WARNING) << "could not convert window_setting to enum: " << windowSettingString;
                 return false;
             }
-            
-            return true;
+            LOG_S(INFO) << "MFFT done";
+            break;
+        }
         case RecordingMode::MTC:
-            LOG_S(WARNING) << "could not read MTC_config from config";
-            return false;
+            //LOG_S(WARNING) << "could not read MTC_config from config";
+            //return false;
             //return true;
         case RecordingMode::AFFT:
         case RecordingMode::RTS:
             //TODO
-            if (!readRTSConfig(node["RTS_config"], vibrationSensor.rtsConfig)) {
-                LOG_S(WARNING) << "could not read MTC_config from config";
-                return false;
-            }
-            return true;
-        default:
+            //if (!readRTSConfig(node["RTS_config"], vibrationSensor.rtsConfig)) {
+            //    LOG_S(WARNING) << "could not read MTC_config from config";
+            //    return false;
+            //}
+            //return true;
+        default: {
             LOG_S(WARNING) << "only MFFT supported.";
             return false;
+        }
     }
     vibrationSensorConfigs.push_back(vibrationSensor);
 
@@ -265,17 +271,18 @@ bool setupVibrationSensorModules(const bool &externalTriggerActivated) {
 
 //        vibrationSensorModule.triggerAutonull();
 //        vibrationSensorModule.restoreFactorySettings();
-
+    LOG_S(INFO) << "Activating mode: " << Enum::toString(vibrationSensor.recordingMode);
         switch (vibrationSensorConfig.recordingMode) {
             case RecordingMode::MFFT:
+                LOG_S(INFO) << "activating mode MFFT";
                 vibrationSensorModule.activateMode(vibrationSensorConfig.mfftConfig);
                 break;
             case RecordingMode::MTC:
                 vibrationSensorModule.activateMode(vibrationSensorConfig.mtcConfig);
                 break;
-            case RecordingMode::RTC:
-                vibrationSensorModule.activateMode(vibrationSensorConfig.rtcConfig);
-                break;
+            //case RecordingMode::RTC:
+                //vibrationSensorModule.activateMode(vibrationSensorConfig.rtcConfig);
+                //break;
         }
 
         vibrationSensorModules.push_back(vibrationSensorModule);

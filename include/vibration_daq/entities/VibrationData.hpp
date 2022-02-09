@@ -6,6 +6,7 @@
 #pragma once
 
 #include "RecordingMode.hpp"
+#include <vector>
 
 namespace vibration_daq {
     struct VibrationData {

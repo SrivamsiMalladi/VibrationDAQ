@@ -14,6 +14,5 @@ namespace vibration_daq {
         RecordingMode recordingMode;
         MFFTConfig mfftConfig;
         MTCConfig mtcConfig;
-        RTSConfig rtsConfig;
     };
 }

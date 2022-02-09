@@ -10,6 +10,7 @@ apps/CMakeFiles/vibration_daq_app.dir/main.cpp.o
  ../include/vibration_daq/entities/RecordingConfig.hpp
  ../include/vibration_daq/entities/RecordingMode.hpp
  ../include/vibration_daq/entities/VibrationData.hpp
+ ../include/vibration_daq/entities/VibrationSensorConfig.hpp
  ../include/vibration_daq/entities/WindowSetting.hpp
  ../include/vibration_daq/utils/EnumConversion.hpp
  ../include/vibration_daq/utils/HexUtils.hpp

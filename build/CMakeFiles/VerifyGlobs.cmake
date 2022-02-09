@@ -6,7 +6,6 @@ cmake_policy(SET CMP0009 NEW)
 file(GLOB NEW_GLOB LIST_DIRECTORIES true "/home/pi/Documents/SrivamsiMalladi/VibrationDAQ_AE/VibrationDAQ/include/vibration_daq/*.hpp")
 set(OLD_GLOB
   "/home/pi/Documents/SrivamsiMalladi/VibrationDAQ_AE/VibrationDAQ/include/vibration_daq/ADcmXL3021Library.hpp"
-  "/home/pi/Documents/SrivamsiMalladi/VibrationDAQ_AE/VibrationDAQ/include/vibration_daq/ConfigModule.hpp"
   "/home/pi/Documents/SrivamsiMalladi/VibrationDAQ_AE/VibrationDAQ/include/vibration_daq/StorageModule.hpp"
   "/home/pi/Documents/SrivamsiMalladi/VibrationDAQ_AE/VibrationDAQ/include/vibration_daq/VibrationSensorModule.hpp"
   )

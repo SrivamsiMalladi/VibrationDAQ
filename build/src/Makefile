@@ -206,33 +206,6 @@ vibration_library/fast:
 	cd /home/pi/Documents/SrivamsiMalladi/VibrationDAQ_AE/VibrationDAQ/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/vibration_library.dir/build.make src/CMakeFiles/vibration_library.dir/build
 .PHONY : vibration_library/fast
 
-ConfigModule.o: ConfigModule.cpp.o
-
-.PHONY : ConfigModule.o
-
-# target to build an object file
-ConfigModule.cpp.o:
-	cd /home/pi/Documents/SrivamsiMalladi/VibrationDAQ_AE/VibrationDAQ/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/vibration_library.dir/build.make src/CMakeFiles/vibration_library.dir/ConfigModule.cpp.o
-.PHONY : ConfigModule.cpp.o
-
-ConfigModule.i: ConfigModule.cpp.i
-
-.PHONY : ConfigModule.i
-
-# target to preprocess a source file
-ConfigModule.cpp.i:
-	cd /home/pi/Documents/SrivamsiMalladi/VibrationDAQ_AE/VibrationDAQ/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/vibration_library.dir/build.make src/CMakeFiles/vibration_library.dir/ConfigModule.cpp.i
-.PHONY : ConfigModule.cpp.i
-
-ConfigModule.s: ConfigModule.cpp.s
-
-.PHONY : ConfigModule.s
-
-# target to generate assembly for a file
-ConfigModule.cpp.s:
-	cd /home/pi/Documents/SrivamsiMalladi/VibrationDAQ_AE/VibrationDAQ/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/vibration_library.dir/build.make src/CMakeFiles/vibration_library.dir/ConfigModule.cpp.s
-.PHONY : ConfigModule.cpp.s
-
 StorageModule.o: StorageModule.cpp.o
 
 .PHONY : StorageModule.o
@@ -355,9 +328,6 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... periphery_lib"
 	@echo "... vibration_library"
-	@echo "... ConfigModule.o"
-	@echo "... ConfigModule.i"
-	@echo "... ConfigModule.s"
 	@echo "... StorageModule.o"
 	@echo "... StorageModule.i"
 	@echo "... StorageModule.s"
